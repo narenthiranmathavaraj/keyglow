@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug KeyGlow (attach to QEMU on :1234)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/keyglow.elf",
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb-multiarch",
+      "miDebuggerServerAddress": "localhost:1234",
+      "stopAtEntry": false,
+      "setupCommands": [
+        { "description": "pretty printing", "text": "-enable-pretty-printing", "ignoreFailures": true }
+      ]
+    }
+  ]
+}
