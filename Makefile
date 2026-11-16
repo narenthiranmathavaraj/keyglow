@@ -42,8 +42,8 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -std=c11 -Isrc -pthread
 
-SRC = src/ringbuf.c
-TEST = tests/unit/test_ringbuf.c
+SRC = src/backlight.c
+TEST = tests/unit/test_backlight.c
 
 .PHONY: unit clean
 
