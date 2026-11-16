@@ -6,12 +6,16 @@ PROJECT ?= src/startup
 build:
 	arm-none-eabi-as -mcpu=$(CPU) -g -c src/startup.S -o src/startup.o
 	arm-none-eabi-gcc -mcpu=$(CPU) -mthumb -g -O0 -ffreestanding -c src/main.c -o src/main.o
-	arm-none-eabi-gcc -mcpu=$(CPU) -mthumb -nostartfiles -T src/linker.ld src/startup.o src/main.o -o $(PROJECT).elf
+	arm-none-eabi-gcc -mcpu=$(CPU) -mthumb -g -O0 -ffreestanding -c src/ringbuf.c -o src/ringbuf.o
+	arm-none-eabi-gcc -mcpu=$(CPU) -mthumb -g -O0 -ffreestanding -c src/uart.c -o src/uart.o
+		arm-none-eabi-gcc -mcpu=$(CPU) -mthumb -nostdlib \
+		src/startup.o src/main.o src/ringbuf.o src/uart.o \
+		-T src/linker.ld -o $(PROJECT).elf
 	arm-none-eabi-objdump -D -S $(PROJECT).elf > $(PROJECT).elf.lst
 	arm-none-eabi-readelf -a $(PROJECT).elf > $(PROJECT).elf.debug
 
 qemu: build
-	qemu-system-arm -S -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT).elf -gdb tcp::1234
+	qemu-system-arm -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT).elf -gdb tcp::1234
 
 gdb:
 	gdb-multiarch -q $(PROJECT).elf \
@@ -25,14 +29,16 @@ run: build
 
 
 run_terminal: build
-	qemu-system-arm -S -M $(BOARD) -cpu $(CPU) -nographic \
+	qemu-system-arm -M $(BOARD) -cpu $(CPU) -nographic\
 	  -kernel $(PROJECT).elf \
 	  -gdb tcp::1234 \
-	  -serial unix:/tmp/uart0.sock,server,nowait
+	  -monitor none \
+	  -serial stdio\
+	  -serial unix:/tmp/uart1.sock,server,nowait
 
 
 socket:
-	socat -,raw,echo=0 unix-connect:/tmp/uart0.sock
+	socat -,raw,echo=0 unix-connect:/tmp/uart1.sock
 
 
 
@@ -42,8 +48,8 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -std=c11 -Isrc -pthread
 
-SRC = src/backlight.c
-TEST = tests/unit/test_backlight.c
+SRC = src/ringbuf.c
+TEST = tests/unit/test_ringbuf.c
 
 .PHONY: unit clean
 

@@ -1,5 +1,5 @@
 
-ENTRY(vector_table)
+ENTRY(RESET_Handler)
 
 MEMORY
 {

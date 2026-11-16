@@ -6,7 +6,7 @@ void ringbuf_init(ringbuf_t *rb) {
     rb->count = 0;
 }
 
-bool ringbuf_push(ringbuf_t *rb, uint8_t data) {
+bool ringbuf_push(ringbuf_t *rb, char data) {
 
     if (ringbuf_is_full(rb)) {
         // Buffer is full
@@ -19,7 +19,7 @@ bool ringbuf_push(ringbuf_t *rb, uint8_t data) {
     return true;
 }
 
-bool ringbuf_pop(ringbuf_t *rb, uint8_t *data) {
+bool ringbuf_pop(ringbuf_t *rb, char *data) {
     if (ringbuf_is_empty(rb)) {
         // Buffer is empty
         return false;

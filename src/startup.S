@@ -1,9 +1,17 @@
 .syntax unified
 .cpu cortex-m3
 .thumb
+// #systick configuration registers
+.equ SYST_CSR, 0xE000E010
+.equ SYST_RVR, 0xE000E014
+.equ SYST_CVR, 0xE000E018
+.equ SYST_CALIB, 0xE000E01C
+.equ TIMEOUT, 0x00ffffff
 
-.global reset_handler
+
+.global RESET_Handler
 .extern USART1_IRQHandler
+.extern SYSTICK_Handler
 
 .section .vectors, "a"
 .align 8
@@ -12,18 +20,32 @@ vector_table:
 
     /* Initial stack pointer and reset handler */
     .word _estack
-    .word reset_handler
+    .word RESET_Handler
+
+    .org 0x3C
+
+    .word SYSTICK_Handler
+
     .org 0xD4
-    /* External IRQ 37 = USART1 */
     .word USART1_IRQHandler
+    /* External IRQ 37 = USART1 */
 
 
 .section .text
 .thumb_func
 
+RESET_Handler:
+    /* 1. Initialize systick timer*/
 
-
-reset_handler:
+    LDR	    r0, =SYST_CSR
+    LDR	    r1, =SYST_RVR
+    LDR	    r2, =SYST_CVR
+    LDR	    r3, =TIMEOUT
+    STR	    r3, [r1]
+    MOV	    r3, #0x0
+    STR	    r3, [r2]
+    MOV	    r3, #0x7 /*to make last three bits one*/
+    STR	    r3, [r0]
 
     /* 1. Initialize stack pointer */
     ldr sp, =_estack
