@@ -53,3 +53,4 @@ Refer to the following resource when progressing through the course:
 
 # Copyright
 Copyright © 2025 pyjamabrah.com. All Rights Reserved.
+https://dev.to/ripan030/linker-scripts-explained-controlling-memory-layout-on-bare-metal-3ocb
