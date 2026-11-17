@@ -54,3 +54,26 @@ Refer to the following resource when progressing through the course:
 # Copyright
 Copyright © 2025 pyjamabrah.com. All Rights Reserved.
 https://dev.to/ripan030/linker-scripts-explained-controlling-memory-layout-on-bare-metal-3ocb
+
+
+Bare-Metal UART Communication with Interrupts and SysTick
+
+This project implements a bare-metal UART communication system using C and ARM assembly (.S and .C) on a Cortex-M microcontroller, without relying on an RTOS or HAL.
+
+It uses USART1 RX interrupts to receive incoming characters asynchronously and stores them in a circular ring buffer. The SysTick timer provides a 1 ms system time base, allowing the main timing logic to process and echo received characters at a controlled rate of 3 letters per second (3 LPS).
+
+The project explores fundamental embedded systems concepts, including:
+
+Bare-metal programming: Direct memory-mapped register access and hardware configuration.
+
+ARM Assembly: Startup code, vector table, and interrupt handler setup.
+
+UART Interrupts: Non-blocking reception using USART1 RXNE interrupts.
+
+Ring Buffer: Decoupling asynchronous UART reception from character processing.
+
+SysTick: Hardware timer-based timekeeping and periodic scheduling.
+
+Interrupt Handling: Managing peripheral interrupts and the Cortex-M NVIC.
+
+The objective is to understand how embedded firmware handles asynchronous communication, hardware interrupts, buffering, and time-dependent operations at the register level, without an RTOS.

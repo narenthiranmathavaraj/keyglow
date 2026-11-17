@@ -8,9 +8,9 @@ ELF Header:
   Type:                              EXEC (Executable file)
   Machine:                           ARM
   Version:                           0x1
-  Entry point address:               0x80000d9
+  Entry point address:               0x80000d8
   Start of program headers:          52 (bytes into file)
-  Start of section headers:          13672 (bytes into file)
+  Start of section headers:          14436 (bytes into file)
   Flags:                             0x5000200, Version5 EABI, soft-float ABI
   Size of this header:               52 (bytes)
   Size of program headers:           32 (bytes)
@@ -23,21 +23,21 @@ Section Headers:
   [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
   [ 0]                   NULL            00000000 000000 000000 00      0   0  0
   [ 1] .vectors          PROGBITS        08000000 001000 0000d8 00   A  0   0 256
-  [ 2] .text             PROGBITS        080000d8 0010d8 00029c 00  AX  0   0  4
-  [ 3] .rodata           PROGBITS        08000374 002000 000000 00  WA  0   0  1
+  [ 2] .text             PROGBITS        080000d8 0010d8 00033c 00  AX  0   0  4
+  [ 3] .rodata           PROGBITS        08000414 001414 00007c 00   A  0   0  4
   [ 4] .data             PROGBITS        20000000 002000 000000 00  WA  0   0  1
-  [ 5] .bss              NOBITS          20000000 002000 000018 00  WA  0   0  4
+  [ 5] .bss              NOBITS          20000000 002000 000028 00  WA  0   0  4
   [ 6] .ARM.attributes   ARM_ATTRIBUTES  00000000 002000 00002f 00      0   0  1
   [ 7] .comment          PROGBITS        00000000 00202f 000026 01  MS  0   0  1
-  [ 8] .debug_line       PROGBITS        00000000 002055 0002d3 00      0   0  1
-  [ 9] .debug_info       PROGBITS        00000000 002328 0004d9 00      0   0  1
-  [10] .debug_abbrev     PROGBITS        00000000 002801 000281 00      0   0  1
-  [11] .debug_aranges    PROGBITS        00000000 002a88 000078 00      0   0  8
-  [12] .debug_str        PROGBITS        00000000 002b00 000264 01  MS  0   0  1
-  [13] .debug_frame      PROGBITS        00000000 002d64 00017c 00      0   0  4
-  [14] .symtab           SYMTAB          00000000 002ee0 000460 10     15  51  4
-  [15] .strtab           STRTAB          00000000 003340 000182 00      0   0  1
-  [16] .shstrtab         STRTAB          00000000 0034c2 0000a3 00      0   0  1
+  [ 8] .debug_line       PROGBITS        00000000 002055 00033f 00      0   0  1
+  [ 9] .debug_info       PROGBITS        00000000 002394 000572 00      0   0  1
+  [10] .debug_abbrev     PROGBITS        00000000 002906 0002d8 00      0   0  1
+  [11] .debug_aranges    PROGBITS        00000000 002be0 000078 00      0   0  8
+  [12] .debug_str        PROGBITS        00000000 002c58 0002b0 01  MS  0   0  1
+  [13] .debug_frame      PROGBITS        00000000 002f08 0001c4 00      0   0  4
+  [14] .symtab           SYMTAB          00000000 0030cc 000520 10     15  56  4
+  [15] .strtab           STRTAB          00000000 0035ec 0001d2 00      0   0  1
+  [16] .shstrtab         STRTAB          00000000 0037be 0000a3 00      0   0  1
 Key to Flags:
   W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
   L (link order), O (extra OS processing required), G (group), T (TLS),
@@ -48,12 +48,12 @@ There are no section groups in this file.
 
 Program Headers:
   Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
-  LOAD           0x001000 0x08000000 0x08000000 0x00374 0x00374 R E 0x1000
-  LOAD           0x002000 0x20000000 0x08000374 0x00000 0x00018 RW  0x1000
+  LOAD           0x001000 0x08000000 0x08000000 0x00490 0x00490 R E 0x1000
+  LOAD           0x002000 0x20000000 0x08000490 0x00000 0x00028 RW  0x1000
 
  Section to Segment mapping:
   Segment Sections...
-   00     .vectors .text 
+   00     .vectors .text .rodata 
    01     .data .bss 
 
 There is no dynamic section in this file.
@@ -62,12 +62,12 @@ There are no relocations in this file.
 
 There are no unwind sections in this file.
 
-Symbol table '.symtab' contains 70 entries:
+Symbol table '.symtab' contains 82 entries:
    Num:    Value  Size Type    Bind   Vis      Ndx Name
      0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND 
      1: 08000000     0 SECTION LOCAL  DEFAULT    1 .vectors
      2: 080000d8     0 SECTION LOCAL  DEFAULT    2 .text
-     3: 08000374     0 SECTION LOCAL  DEFAULT    3 .rodata
+     3: 08000414     0 SECTION LOCAL  DEFAULT    3 .rodata
      4: 20000000     0 SECTION LOCAL  DEFAULT    4 .data
      5: 20000000     0 SECTION LOCAL  DEFAULT    5 .bss
      6: 00000000     0 SECTION LOCAL  DEFAULT    6 .ARM.attributes
@@ -83,7 +83,7 @@ Symbol table '.symtab' contains 70 entries:
     16: e000e014     0 NOTYPE  LOCAL  DEFAULT  ABS SYST_RVR
     17: e000e018     0 NOTYPE  LOCAL  DEFAULT  ABS SYST_CVR
     18: e000e01c     0 NOTYPE  LOCAL  DEFAULT  ABS SYST_CALIB
-    19: 00ffffff     0 NOTYPE  LOCAL  DEFAULT  ABS TIMEOUT
+    19: 00005dbf     0 NOTYPE  LOCAL  DEFAULT  ABS TIMEOUT
     20: 08000000     0 NOTYPE  LOCAL  DEFAULT    1 $d
     21: 08000000     0 NOTYPE  LOCAL  DEFAULT    1 vector_table
     22: 080000d8     0 NOTYPE  LOCAL  DEFAULT    2 $t
@@ -98,42 +98,54 @@ Symbol table '.symtab' contains 70 entries:
     31: 08000124     0 NOTYPE  LOCAL  DEFAULT    2 $d
     32: 00000000     0 FILE    LOCAL  DEFAULT  ABS main.c
     33: 20000000     0 NOTYPE  LOCAL  DEFAULT    5 $d
-    34: 08000148     0 NOTYPE  LOCAL  DEFAULT    2 $t
-    35: 0800016c     0 NOTYPE  LOCAL  DEFAULT    2 $d
-    36: 08000174     0 NOTYPE  LOCAL  DEFAULT    2 $t
-    37: 080001a0     0 NOTYPE  LOCAL  DEFAULT    2 $d
-    38: 080001ac     0 NOTYPE  LOCAL  DEFAULT    2 $t
-    39: 080001e0     0 NOTYPE  LOCAL  DEFAULT    2 $d
-    40: 080001e8     0 NOTYPE  LOCAL  DEFAULT    2 $t
-    41: 08000214     0 NOTYPE  LOCAL  DEFAULT    2 $d
-    42: 08000218     0 NOTYPE  LOCAL  DEFAULT    2 $t
-    43: 08000230     0 NOTYPE  LOCAL  DEFAULT    2 $d
-    44: 00000000     0 FILE    LOCAL  DEFAULT  ABS ringbuf.c
-    45: 08000234     0 NOTYPE  LOCAL  DEFAULT    2 $t
-    46: 080002c0     0 NOTYPE  LOCAL  DEFAULT    2 $d
-    47: 080002c4     0 NOTYPE  LOCAL  DEFAULT    2 $t
-    48: 0800032c     0 NOTYPE  LOCAL  DEFAULT    2 $d
-    49: 08000330     0 NOTYPE  LOCAL  DEFAULT    2 $t
-    50: 00000000     0 FILE    LOCAL  DEFAULT  ABS uart.c
-    51: 080002c5   108 FUNC    GLOBAL DEFAULT    2 ringbuf_pop
-    52: 08000374     0 NOTYPE  GLOBAL DEFAULT  ABS _sidata
-    53: 20000000     0 NOTYPE  GLOBAL DEFAULT    5 _sbss
-    54: 08000235    36 FUNC    GLOBAL DEFAULT    2 ringbuf_init
-    55: 20000000     0 NOTYPE  GLOBAL DEFAULT    4 _sdata
-    56: 20000018     0 NOTYPE  GLOBAL DEFAULT    5 _ebss
-    57: 08000353    34 FUNC    GLOBAL DEFAULT    2 ringbuf_is_full
-    58: 080001e9    48 FUNC    GLOBAL DEFAULT    2 uart_init
-    59: 08000219    28 FUNC    GLOBAL DEFAULT    2 main
-    60: 080001ad    60 FUNC    GLOBAL DEFAULT    2 SYSTICK_Handler
-    61: 08000149    44 FUNC    GLOBAL DEFAULT    2 USART1_Interrupt_Init
-    62: 20002000     0 NOTYPE  GLOBAL DEFAULT    1 _estack
-    63: 08000259   108 FUNC    GLOBAL DEFAULT    2 ringbuf_push
-    64: 20000000     0 NOTYPE  GLOBAL DEFAULT    4 _edata
-    65: 080000d9     0 FUNC    GLOBAL DEFAULT    2 RESET_Handler
-    66: 08000331    34 FUNC    GLOBAL DEFAULT    2 ringbuf_is_empty
-    67: 08000175    56 FUNC    GLOBAL DEFAULT    2 USART1_IRQHandler
-    68: 20000000    23 OBJECT  GLOBAL DEFAULT    5 uart_rx_buffer
-    69: 20000017     1 OBJECT  GLOBAL DEFAULT    5 received_char
+    34: 08000414     0 NOTYPE  LOCAL  DEFAULT    3 $d
+    35: 08000148     0 NOTYPE  LOCAL  DEFAULT    2 $t
+    36: 08000158     0 NOTYPE  LOCAL  DEFAULT    2 $d
+    37: 0800015c     0 NOTYPE  LOCAL  DEFAULT    2 $t
+    38: 08000180     0 NOTYPE  LOCAL  DEFAULT    2 $d
+    39: 08000188     0 NOTYPE  LOCAL  DEFAULT    2 $t
+    40: 080001d0     0 NOTYPE  LOCAL  DEFAULT    2 $d
+    41: 080001d4     0 NOTYPE  LOCAL  DEFAULT    2 $t
+    42: 08000200     0 NOTYPE  LOCAL  DEFAULT    2 $d
+    43: 0800020c     0 NOTYPE  LOCAL  DEFAULT    2 $t
+    44: 0800026c     0 NOTYPE  LOCAL  DEFAULT    2 $d
+    45: 08000280     0 NOTYPE  LOCAL  DEFAULT    2 $t
+    46: 080002ac     0 NOTYPE  LOCAL  DEFAULT    2 $d
+    47: 080002b0     0 NOTYPE  LOCAL  DEFAULT    2 $t
+    48: 080002cc     0 NOTYPE  LOCAL  DEFAULT    2 $d
+    49: 00000000     0 FILE    LOCAL  DEFAULT  ABS ringbuf.c
+    50: 080002d4     0 NOTYPE  LOCAL  DEFAULT    2 $t
+    51: 08000360     0 NOTYPE  LOCAL  DEFAULT    2 $d
+    52: 08000364     0 NOTYPE  LOCAL  DEFAULT    2 $t
+    53: 080003cc     0 NOTYPE  LOCAL  DEFAULT    2 $d
+    54: 080003d0     0 NOTYPE  LOCAL  DEFAULT    2 $t
+    55: 00000000     0 FILE    LOCAL  DEFAULT  ABS uart.c
+    56: 08000365   108 FUNC    GLOBAL DEFAULT    2 ringbuf_pop
+    57: 08000490     0 NOTYPE  GLOBAL DEFAULT  ABS _sidata
+    58: 20000000     0 NOTYPE  GLOBAL DEFAULT    5 _sbss
+    59: 080002d5    36 FUNC    GLOBAL DEFAULT    2 ringbuf_init
+    60: 2000001c     4 OBJECT  GLOBAL DEFAULT    5 current_time
+    61: 20000000     0 NOTYPE  GLOBAL DEFAULT    4 _sdata
+    62: 20000028     0 NOTYPE  GLOBAL DEFAULT    5 _ebss
+    63: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND Reset_Handler
+    64: 080003f3    34 FUNC    GLOBAL DEFAULT    2 ringbuf_is_full
+    65: 08000281    48 FUNC    GLOBAL DEFAULT    2 uart_init
+    66: 20000020     4 OBJECT  GLOBAL DEFAULT    5 previous_time
+    67: 080002b1    36 FUNC    GLOBAL DEFAULT    2 main
+    68: 0800020d   116 FUNC    GLOBAL DEFAULT    2 SYSTICK_Handler
+    69: 0800015d    44 FUNC    GLOBAL DEFAULT    2 USART1_Interrupt_Init
+    70: 08000414     4 OBJECT  GLOBAL DEFAULT    3 delay
+    71: 20002000     0 NOTYPE  GLOBAL DEFAULT    1 _estack
+    72: 080002f9   108 FUNC    GLOBAL DEFAULT    2 ringbuf_push
+    73: 20000000     0 NOTYPE  GLOBAL DEFAULT    4 _edata
+    74: 080000d9     0 FUNC    GLOBAL DEFAULT    2 RESET_Handler
+    75: 20000018     4 OBJECT  GLOBAL DEFAULT    5 tick_ms
+    76: 080003d1    34 FUNC    GLOBAL DEFAULT    2 ringbuf_is_empty
+    77: 080001d5    56 FUNC    GLOBAL DEFAULT    2 USART1_IRQHandler
+    78: 20000000    23 OBJECT  GLOBAL DEFAULT    5 uart_rx_buffer
+    79: 08000149    20 FUNC    GLOBAL DEFAULT    2 millis
+    80: 08000189    76 FUNC    GLOBAL DEFAULT    2 USART1_SendString
+    81: 20000024     1 OBJECT  GLOBAL DEFAULT    5 received_char
 
 No version information found in this file.
 Attribute Section: aeabi

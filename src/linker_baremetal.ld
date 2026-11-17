@@ -1,5 +1,5 @@
 
-ENTRY(RESET_Handler)
+ENTRY(Reset_Handler)
 
 MEMORY
 {

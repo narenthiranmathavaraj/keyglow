@@ -23,6 +23,7 @@
         "${workspaceFolder}/src/rtos",
         "${workspaceFolder}/config",
         "${workspaceFolder}/third_party/FreeRTOS-Kernel/include",
+        "${workspaceFolder}/third_party/FreeRTOS-Kernel",
         "${workspaceFolder}/third_party/FreeRTOS-Kernel/portable/GCC/ARM_CM3"
       ]
     },
