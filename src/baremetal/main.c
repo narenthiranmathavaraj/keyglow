@@ -1,9 +1,7 @@
 #include<stdint.h>
 #include "crc8.h"
 #include "ringbuf.h"
-#include "ringbuf.h"
 #include "uart.h"
-
 
 ringbuf_t uart_rx_buffer;
 
@@ -32,8 +30,7 @@ void SYSTICK_Handler(void){
 		if (ringbuf_pop(&uart_rx_buffer, &data))
 	    {
 	        // Wait until transmit data register is empty
-	       if(!(USART1->SR & USART_SR_TXE));
-
+	       while(!(USART1->SR & USART_SR_TXE));
 		        // Send the received byte back
 		        USART1->DR = data;
 	    }
@@ -48,19 +45,16 @@ void uart_init(void)
 	USART1->GTPR = 0; //Adds a "Breathing Room" Pause
 	USART1->BRR = (8000000U + (115200U / 2U)) / 115200U; // Evaluates to 69 (0x45)
 }
+
+
+
+
 void main(void) {
     uart_init();
 	ringbuf_init(&uart_rx_buffer);
     USART1_Interrupt_Init();
-
     __asm volatile ("cpsie i"); // Enables interrupts globally
 
-    const char *s = "hello\n";
-
-    while (*s) {
-        USART1->DR = *s++;
-    }
-	char data;
     while (1){
 	}
 

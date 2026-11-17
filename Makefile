@@ -1,43 +1,32 @@
 # KeyGlow: firmware for a simulated STM32F100 (Cortex-M3) on QEMU
 CPU     ?= cortex-m3
 BOARD   ?= stm32vldiscovery
-PROJECT ?= src/startup
-
-build:
+PROJECT_BAREMETAL ?= src/baremetal/startup
+INCLUDES_BAREMETAL = -I src/common -I src/drivers
+build_baremetal:
 	arm-none-eabi-as -mcpu=$(CPU) -g -c src/startup.S -o src/startup.o
-	arm-none-eabi-gcc -mcpu=$(CPU) -mthumb -g -O0 -ffreestanding -c src/main.c -o src/main.o
-	arm-none-eabi-gcc -mcpu=$(CPU) -mthumb -g -O0 -ffreestanding -c src/ringbuf.c -o src/ringbuf.o
-	arm-none-eabi-gcc -mcpu=$(CPU) -mthumb -g -O0 -ffreestanding -c src/uart.c -o src/uart.o
-		arm-none-eabi-gcc -mcpu=$(CPU) -mthumb -nostdlib \
-		src/startup.o src/main.o src/ringbuf.o src/uart.o \
-		-T src/linker.ld -o $(PROJECT).elf
-	arm-none-eabi-objdump -D -S $(PROJECT).elf > $(PROJECT).elf.lst
-	arm-none-eabi-readelf -a $(PROJECT).elf > $(PROJECT).elf.debug
+	arm-none-eabi-gcc -mcpu=$(CPU) -mthumb -g -O0 -ffreestanding $(INCLUDES_BAREMETAL) -c src/baremetal/main.c -o src/baremetal/main.o
+	arm-none-eabi-gcc -mcpu=$(CPU) -mthumb -g -O0 -ffreestanding $(INCLUDES_BAREMETAL) -c src/common/ringbuf.c -o src/baremetal/ringbuf.o
+	arm-none-eabi-gcc -mcpu=$(CPU) -mthumb -g -O0 -ffreestanding $(INCLUDES_BAREMETAL) -c src/drivers/uart.c -o src/baremetal/uart.o
+	arm-none-eabi-gcc -mcpu=$(CPU) -mthumb -nostdlib src/startup.o src/baremetal/main.o src/baremetal/ringbuf.o src/baremetal/uart.o \
+	-T src/linker.ld -o $(PROJECT_BAREMETAL).elf
+	arm-none-eabi-objdump -D -S $(PROJECT_BAREMETAL).elf > $(PROJECT_BAREMETAL).elf.lst
+	arm-none-eabi-readelf -a $(PROJECT_BAREMETAL).elf > $(PROJECT_BAREMETAL).elf.debug
 
-qemu: build
-	qemu-system-arm -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT).elf -gdb tcp::1234
+qemu_baremetal: build_baremetal
+# 	qemu-system-arm -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT_BAREMETAL).elf -gdb tcp::1234
+	qemu-system-arm -S -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT_BAREMETAL).elf -gdb tcp::1234
 
-gdb:
-	gdb-multiarch -q $(PROJECT).elf \
+gdb_baremetal:
+	gdb-multiarch -q $(PROJECT_BAREMETAL).elf \
 	    -ex "target remote localhost:1234"
 
-clean_outputs:
-	rm -rf src/*.out src/*.elf src/*.gdb_history src/*.lst src/*.debug src/*.o src/*.bin
+clean_baremetal:
+	rm -rf src/*.out src/*.elf src/*.gdb_history src/*.lst src/*.debug src/*.o src/*.bin \
+	src/baremetal/*.out src/baremetal/*.elf src/baremetal/*.gdb_history src/baremetal/*.lst \
+	src/baremetal/*.elf.debug src/baremetal/*.o src/baremetal/*.bin
 
-run: build
-	qemu-system-arm -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT).elf
-
-
-run_terminal: build
-	qemu-system-arm -M $(BOARD) -cpu $(CPU) -nographic\
-	  -kernel $(PROJECT).elf \
-	  -gdb tcp::1234 \
-	  -monitor none \
-	  -serial stdio\
-	  -serial unix:/tmp/uart1.sock,server,nowait
-
-
-socket:
+socket_baremetal:
 	socat -,raw,echo=0 unix-connect:/tmp/uart1.sock
 
 
@@ -53,11 +42,11 @@ TEST = tests/unit/test_ringbuf.c
 
 .PHONY: unit clean
 
-unit:
+unit_test:
 	$(CC) $(CFLAGS) $(SRC) $(TEST) -o test_ringbuf
 	./test_ringbuf
 
-clean:
+clean_test:
 	rm -f test_ringbuf
 
 

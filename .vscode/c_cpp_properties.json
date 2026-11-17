@@ -1,0 +1,37 @@
+{
+  "version": 4,
+  "configurations": [
+    {
+      "name": "baremetal",
+      "compilerPath": "/usr/bin/arm-none-eabi-gcc",
+      "intelliSenseMode": "gcc-arm",
+      "cStandard": "c11",
+      "includePath": [
+        "${workspaceFolder}/src/common",
+        "${workspaceFolder}/src/drivers",
+        "${workspaceFolder}/src/baremetal"
+      ]
+    },
+    {
+      "name": "rtos",
+      "compilerPath": "/usr/bin/arm-none-eabi-gcc",
+      "intelliSenseMode": "gcc-arm",
+      "cStandard": "c11",
+      "includePath": [
+        "${workspaceFolder}/src/common",
+        "${workspaceFolder}/src/drivers",
+        "${workspaceFolder}/src/rtos",
+        "${workspaceFolder}/config",
+        "${workspaceFolder}/third_party/FreeRTOS-Kernel/include",
+        "${workspaceFolder}/third_party/FreeRTOS-Kernel/portable/GCC/ARM_CM3"
+      ]
+    },
+    {
+      "name": "host-tests",
+      "compilerPath": "/usr/bin/gcc",
+      "intelliSenseMode": "linux-gcc-x64",
+      "cStandard": "c11",
+      "includePath": ["${workspaceFolder}/src/common"]
+    }
+  ]
+}
