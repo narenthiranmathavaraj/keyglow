@@ -111,18 +111,25 @@ void USART1_SendString_RTOS(const char *str, TickType_t delay) {
 
 void USART1_IRQHandler(void)
 {
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
     if (USART1->SR & USART_SR_RXNE)
     {
-        received_char = (char)(USART1->DR & 0xFF); //0xFF Bitmasking
+        received_char = (char)(USART1->DR & 0xFF);
+
         if (uart_buf_locked == 0)
         {
-		    ringbuf_push(&uart_rx_buffer, received_char);
+            ringbuf_push(&uart_rx_buffer, received_char);
+
+            xSemaphoreGiveFromISR(
+                uart_rx_semaphore,
+                &xHigherPriorityTaskWoken
+            );
         }
-
     }
-}
 
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken); //requests a context switch after the ISR.
+}
 
 void vApplicationStackOverflowHook(TaskHandle_t task, char *name)
 {
@@ -298,6 +305,7 @@ void rtos_monkeytype(void *arg)
     		if (USART1->SR & USART_SR_TXE)
     	    {
     	        // Wait until transmit data register is empty
+               xSemaphoreTake(uart_rx_semaphore, portMAX_DELAY);
     	       if(ringbuf_pop(&uart_rx_buffer, &data)){
                     strncat(temp, &data, 1); // Reads only 1 byte from ch and adds '\0'
                     if(data == '\r'){
@@ -352,6 +360,7 @@ void welcome_screen(void *arg)
 	    {
             if (USART1->SR & USART_SR_TXE)
             {
+                xSemaphoreTake(uart_rx_semaphore, portMAX_DELAY);
                 if(ringbuf_pop(&uart_rx_buffer, &data)){
                     strncat(temp, &data, 1); // Reads only 1 byte from ch and adds '\0'
                     if(data == '\r'){

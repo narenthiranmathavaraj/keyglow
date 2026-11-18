@@ -17,8 +17,8 @@ build_baremetal:
 	arm-none-eabi-readelf -a $(PROJECT_BAREMETAL).elf > $(PROJECT_BAREMETAL).elf.debug
 
 qemu_baremetal: build_baremetal
-# 	qemu-system-arm -M $(BOARD) -cpu $(CPU) -no/graphic -kernel $(PROJECT_BAREMETAL).elf -gdb tcp::1234
-	qemu-system-arm -S -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT_BAREMETAL).elf -gdb tcp::1234
+	qemu-system-arm -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT_BAREMETAL).elf -gdb tcp::1234
+# 	qemu-system-arm -S -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT_BAREMETAL).elf -gdb tcp::1234
 
 gdb_baremetal:
 	gdb-multiarch -q $(PROJECT_BAREMETAL).elf \
@@ -104,25 +104,20 @@ clean_test:
 	rm -f test_ringbuf
 
 
+QEMU = qemu-system-arm
+GDB  = gdb-multiarch
 
-
-# help:
-# 	@echo "targets: all run debug gdb unit sim test doctor clean"
-# 	@echo "vars:    CPU=$(CPU) BOARD=$(BOARD) NAME=$(NAME) HOST_SRCS=<host-testable .c files>"
-
-
-# .PHONY: all size run debug gdb unit sim test doctor clean help
-
-# size: $(ELF)
-# 	@$(SIZE) $(ELF)
-
-
-# sim: all
-# 	@test -f tests/sim/run_sim.py || { echo "sim: tests/sim/run_sim.py missing"; exit 1; }
-# 	python3 tests/sim/run_sim.py
+.PHONY: help doctor
+help:
+	@echo "build cmd:  make build_baremetal or make build_rtos"
+	@echo "run cmd:    make -s qemu_baremetal  or make -s qemu_rtos"
+	@echo "stop cmd:   Ctrl+A then X"
+	@echo "debug cmd:  make gdb_baremetal   or make gdb_rtos"
+	@echo "clean cmd:  make clean_baremetal or make clean_rtos"
 
 doctor:
-	@echo "== toolchain =="; $(CC) --version | head -1; $(QEMU) --version | head -1; $(GDB) --version | head -1; python3 --version
-	@$(QEMU) -M help | grep -q "^$(BOARD) " && echo "QEMU machine $(BOARD): ok" || { echo "QEMU machine $(BOARD): MISSING"; exit 1; }
-	@test -f $(FREERTOS)/tasks.c && echo "FreeRTOS: ok" || echo "FreeRTOS: missing (run scripts/bootstrap.sh)"
-	@test -f $(UNITY)/src/unity.c && echo "Unity: ok" || echo "Unity: missing (run scripts/bootstrap.sh)"
+	@arm-none-eabi-gcc --version | head -1
+	@$(QEMU) --version | head -1
+	@$(GDB) --version | head -1
+	@$(QEMU) -M help | grep -q "^$(BOARD) " && echo "QEMU board $(BOARD): ok" || { echo "QEMU board $(BOARD): MISSING"; exit 1; }
+	@test -f $(FREERTOS_DIR)/tasks.c && echo "FreeRTOS: ok" || echo "FreeRTOS: missing"

@@ -1,79 +1,200 @@
-# KeyGlow
+# Tiny Chip, Two Brains: Bare Metal and RTOS
 
-Power-saving keyboard backlight controller for a simulated STM32F100 (Cortex-M3), running on QEMU.
-Type on the keyboard: a UART interrupt wakes the backlight, keystrokes flow through a ring buffer and
-FreeRTOS tasks to a "display" over a second UART, and the backlight turns off after 5 s of inactivity.
+Two embedded projects in one repo. Both run on a simulated STM32F100 (Cortex-M3) in QEMU. No hardware needed.
 
-[![ci](https://github.com/<your-user>/<repo>/actions/workflows/ci.yml/badge.svg)](https://github.com/<your-user>/<repo>/actions)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/<your-user>/<repo>)
+1. **baremetal**: UART echo using interrupts and SysTick. No RTOS, no HAL.
+2. **rtos**: Speed typing test and motivation chatbot on FreeRTOS.
 
-## Try it (no install)
-1. Click **Open in GitHub Codespaces** above and wait for the container to build.
-2. Run `make test`. It builds the firmware, runs the Unity unit tests, runs the QEMU simulation test, and ends with `RESULT: PASS`.
+## Try it in the browser (GitHub Codespaces)
 
-## Run it yourself
-| Command | What it does |
+1. Click the badge and wait for the container to build.
+
+   [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/<your-user>/<repo>)
+
+2. Open a terminal in the Codespace: **Terminal > New Terminal** (or Ctrl+`).
+
+## Commands
+
+**Step 1. Check the setup**
+
+```bash
+make doctor
+```
+
+Prints tool versions and tells you if something is missing.
+
+**Step 2. See all commands**
+
+```bash
+make help
+```
+
+Lists the commands to build, run and stop each project.
+
+**Step 3. Run a project**
+
+```bash
+make -s qemu_baremetal
+```
+```bash
+make -s qemu_rtos
+```
+
+**Step 4. Stop a project**
+
+Press `Ctrl+A`, release, then press `X`.
+
+## What you will see
+
+### Baremetal
+
+- Type characters in the terminal.
+- They are echoed back slowly, at 3 letters per second.
+- The speed stays fixed even if you type fast, because the extra characters wait in a ring buffer.
+
+### RTOS
+
+- Typing test: shows your words per minute (WPM) and accuracy.
+- Chatbot: prints a random motivational quote.
+- Both run as separate FreeRTOS tasks on one CPU.
+
+---
+
+## Project 1: Bare-metal UART with interrupts and SysTick
+
+A UART echo program written in Embedded C and ARM Assembly. It does not use an RTOS or a HAL. All hardware is controlled by writing to memory-mapped registers.
+
+How it works:
+
+- USART1 RX interrupts receive characters without blocking.
+- Received characters go into a circular ring buffer.
+- The SysTick timer gives a 1 ms time base.
+- The main loop takes one character from the buffer and echoes it at 3 letters per second.
+
+### Features
+
+- Bare-metal programming: direct register access and peripheral setup.
+- ARM Assembly: startup code, interrupt vector table, interrupt handler setup.
+- UART interrupts: non-blocking receive using the RXNE interrupt.
+- Ring buffer: separates the interrupt (producer) from the main loop (consumer).
+- SysTick: 1 ms timekeeping, no blocking delays.
+- NVIC: enables and manages the peripheral interrupt.
+
+### What it demonstrates
+
+| Technique | Where it is used |
 |---|---|
-| `make` | build the ELF and BIN |
-| `make run` | run on QEMU. Terminal = keyboard on USART1. Display on USART2: `nc localhost 5555` in a second terminal |
-| `make debug` then `make gdb` | QEMU paused, GDB attached on :1234 (or press F5 in VS Code) |
-| `make unit` | host-side Unity tests with ASan and UBSan |
-| `make sim` | automated QEMU test (Python) |
-| `make test` | build + unit + sim |
-| `make doctor` | print tool versions and check dependencies |
+| Bare-metal programming | Hardware control without an OS or HAL |
+| Memory-mapped registers | Peripheral configuration |
+| ARM Assembly startup | Processor setup before C code runs |
+| Interrupt vector table | Maps interrupts to handlers |
+| UART RX interrupts | Asynchronous serial input |
+| Circular ring buffer | Producer-consumer data handling |
+| SysTick timer | Periodic timekeeping |
+| NVIC | Interrupt enable and priority |
+| Non-blocking reception | No continuous UART polling |
 
-## Architecture
-_TODO: add diagram and a short description of the tasks, queues, semaphore and mutex._
+### Tech stack
 
-## Design notes
-_TODO: startup and linker script, ISR design, ring buffer, backlight state machine, semaphore vs mutex, GDB experiments._
+Embedded C, ARM Thumb Assembly, ARM Cortex-M, USART1, SysTick, NVIC, ring buffer, GNU ARM Embedded Toolchain.
 
+### What I learned
 
-```
-The code provided as part of this repository is ONLY for learning purposes!
-```
+- How to configure peripherals through memory-mapped registers.
+- How startup code prepares the processor before C code runs.
+- How the vector table connects interrupts to handlers.
+- How UART interrupts receive data without polling.
+- How a ring buffer separates interrupt code from application code.
+- How SysTick makes a 1 ms time base for non-blocking timing.
 
-# Resources
+---
 
-Refer to the following resource when progressing through the course:
+## Project 2: RTOS Speed Typing Chatbot
+
+A UART application built on FreeRTOS, ARM Cortex-M3, Embedded C and Assembly. It shows how an RTOS runs several activities at once, handles interrupts, and shares the CPU between tasks.
+
+It has two features:
+
+1. **Speed typing test**: measures WPM and character accuracy.
+2. **Motivation chatbot**: prints random quotes about FreeRTOS ideas.
+
+### Features
+
+Speed typing test:
+
+- UART typing interface.
+- Measures WPM.
+- Calculates character accuracy.
+- Interrupt-driven UART receive.
+- Characters pass through a ring buffer.
+- A binary semaphore tells the task when the UART interrupt has data.
+
+Chatbot:
+
+- Picks a random quote.
+- Uses task notifications to wake the task when an event happens.
+- The task stays blocked until the event arrives.
+- Uses RTOS delays while sending over UART.
+
+### What it demonstrates
+
+| Technique | Where it is used |
+|---|---|
+| Priority-based scheduling | Important tasks run first |
+| Interrupt-driven UART | Asynchronous serial communication |
+| Circular ring buffer | Producer-consumer data handling |
+| Binary semaphore | Interrupt-to-task signal |
+| Task notifications | Light event signal between tasks |
+| Task blocking | CPU is free while a task waits |
+| Context switching | Independent tasks run in turns |
+| Stack overflow hook | Detects stack memory problems |
+| WFI instruction | Low-power wait |
+| Assembly startup | Processor and runtime setup |
+| Linker script | Memory layout set by hand |
+
+### Tech stack
+
+Embedded C, FreeRTOS, ARM Cortex-M3, ARM Thumb Assembly, USART1 (QEMU), binary semaphore, task notifications, ring buffer, QEMU, GDB, GNU ARM Embedded Toolchain, custom linker script.
+
+### What I learned
+
+- How the scheduler runs many tasks.
+- How an interrupt hands data to a task.
+- How semaphores and task notifications differ.
+- How task priority changes execution order.
+- How an interrupt can request a context switch.
+- How Assembly and the linker script set up the memory and startup before the RTOS runs.
+
+---
+
+## Simulation and debugging
+
+Both projects were built and run in QEMU (Cortex-M3). GDB was used to debug.
+
+Debug commands: `make gdb_baremetal` and `make gdb_rtos`.
+
+**Note:** Tested in QEMU only. Not tested on a real board.
+
+---
+
+## References
+
+Course material:
+
 1. [Cortex-M for Beginners - 2017_EN_v2.pdf](https://community.arm.com/cfs-file/__key/telligent-evolution-components-attachments/01-2057-00-00-00-01-28-35/Cortex_2D00_M-for-Beginners-_2D00_-2017_5F00_EN_5F00_v2.pdf)
 2. [Arm_Cortex-M_Processor_Comparison_Table.pdf](https://documentation-service.arm.com/static/655e085f2c8b3557fee7048f?token=)
 3. [ARM Architecture Reference Manual Thumb-2 Supplement](https://documentation-service.arm.com/static/661d03b55d66282bc2cf7868?token=)
 
-## Documentation
+Documentation:
+
 1. [gnu as](https://ftp.gnu.org/old-gnu/Manuals/gas/html_chapter/as_toc.html)
-1. [Cortex-M3 Instructions](https://developer.arm.com/documentation/ddi0337/h/programmers-model/instruction-set-summary/cortex-m3-instructions)
+2. [Cortex-M3 Instructions](https://developer.arm.com/documentation/ddi0337/h/programmers-model/instruction-set-summary/cortex-m3-instructions)
 
-### STM32VL Discovery
+STM32VL Discovery:
+
 1. [STM32F100x reference manual](https://www.st.com/resource/en/reference_manual/cd00246267-stm32f100xx-advanced-arm-based-32-bit-mcus-stmicroelectronics.pdf)
-1. [STM32F100x data sheet](https://www.st.com/resource/en/datasheet/stm32f100cb.pdf)
+2. [STM32F100x data sheet](https://www.st.com/resource/en/datasheet/stm32f100cb.pdf)
 
-### Cortex-M3 Documentation
+Cortex-M3:
+
 1. [Cortex-M3 Devices Generic User Guide](https://developer.arm.com/documentation/dui0552/latest/)
-
-# Copyright
-Copyright © 2025 pyjamabrah.com. All Rights Reserved.
-https://dev.to/ripan030/linker-scripts-explained-controlling-memory-layout-on-bare-metal-3ocb
-
-
-Bare-Metal UART Communication with Interrupts and SysTick
-
-This project implements a bare-metal UART communication system using C and ARM assembly (.S and .C) on a Cortex-M microcontroller, without relying on an RTOS or HAL.
-
-It uses USART1 RX interrupts to receive incoming characters asynchronously and stores them in a circular ring buffer. The SysTick timer provides a 1 ms system time base, allowing the main timing logic to process and echo received characters at a controlled rate of 3 letters per second (3 LPS).
-
-The project explores fundamental embedded systems concepts, including:
-
-Bare-metal programming: Direct memory-mapped register access and hardware configuration.
-
-ARM Assembly: Startup code, vector table, and interrupt handler setup.
-
-UART Interrupts: Non-blocking reception using USART1 RXNE interrupts.
-
-Ring Buffer: Decoupling asynchronous UART reception from character processing.
-
-SysTick: Hardware timer-based timekeeping and periodic scheduling.
-
-Interrupt Handling: Managing peripheral interrupts and the Cortex-M NVIC.
-
-The objective is to understand how embedded firmware handles asynchronous communication, hardware interrupts, buffering, and time-dependent operations at the register level, without an RTOS.
