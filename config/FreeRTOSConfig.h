@@ -9,7 +9,7 @@
 #define configMAX_PRIORITIES                    4
 #define configMINIMAL_STACK_SIZE                128 //words
 
-#define configTOTAL_HEAP_SIZE                   (2048)
+#define configTOTAL_HEAP_SIZE                   (4096)
 
 #define configSUPPORT_DYNAMIC_ALLOCATION        1
 #define configSUPPORT_STATIC_ALLOCATION         0
@@ -42,7 +42,7 @@
 #define xPortPendSVHandler    PendSV_Handler
 #define xPortSysTickHandler   SysTick_Handler
 
-#define configUSE_MUTEXES                 0
+#define configUSE_MUTEXES                 1
 #define configUSE_RECURSIVE_MUTEXES       0
 #define configUSE_COUNTING_SEMAPHORES     0
 

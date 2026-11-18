@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define RINGBUF_CAPACITY 20
+#define RINGBUF_CAPACITY 100
 
 typedef struct
 {

@@ -1,3 +1,6 @@
+
+# make -s <cmd> s->suppress make -s build_rtos
+
 # KeyGlow: firmware for a simulated STM32F100 (Cortex-M3) on QEMU
 CPU     ?= cortex-m3
 BOARD   ?= stm32vldiscovery
@@ -14,8 +17,8 @@ build_baremetal:
 	arm-none-eabi-readelf -a $(PROJECT_BAREMETAL).elf > $(PROJECT_BAREMETAL).elf.debug
 
 qemu_baremetal: build_baremetal
-	qemu-system-arm -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT_BAREMETAL).elf -gdb tcp::1234
-# 	qemu-system-arm -S -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT_BAREMETAL).elf -gdb tcp::1234
+# 	qemu-system-arm -M $(BOARD) -cpu $(CPU) -no/graphic -kernel $(PROJECT_BAREMETAL).elf -gdb tcp::1234
+	qemu-system-arm -S -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT_BAREMETAL).elf -gdb tcp::1234
 
 gdb_baremetal:
 	gdb-multiarch -q $(PROJECT_BAREMETAL).elf \
@@ -62,8 +65,8 @@ build_rtos:
 	arm-none-eabi-readelf -a $(PROJECT_RTOS).elf > $(PROJECT_RTOS).elf.debug
 
 qemu_rtos: build_rtos
-# 	qemu-system-arm -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT_RTOS).elf -gdb tcp::1234
-	qemu-system-arm -S -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT_RTOS).elf -gdb tcp::1234
+	qemu-system-arm -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT_RTOS).elf -gdb tcp::1234
+# 	qemu-system-arm -S -M $(BOARD) -cpu $(CPU) -nographic -kernel $(PROJECT_RTOS).elf -gdb tcp::1234
 
 gdb_rtos:
 	gdb-multiarch -q $(PROJECT_RTOS).elf \
@@ -76,6 +79,9 @@ clean_rtos:
 
 socket_rtos:
 	socat -,raw,echo=0 unix-connect:/tmp/uart1.sock
+
+size_rtos:
+	arm-none-eabi-size -B -d $(PROJECT_RTOS).elf
 
 
 

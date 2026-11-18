@@ -38,3 +38,5 @@ bool ringbuf_is_empty(ringbuf_t *rb) {
 bool ringbuf_is_full(ringbuf_t *rb) {
     return rb->count == RINGBUF_CAPACITY;
 }
+
+
