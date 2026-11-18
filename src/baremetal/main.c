@@ -91,7 +91,7 @@ void main(void) {
     __asm volatile ("cpsie i"); // Enables interrupts globally
     USART1_SendString(
         "\r\nUART Bare-Metal Communication Ready!\r\n"
-        "Type your message below at a steady pace of "
+        "Type your message below at any pace the message will be displayed at steady pace of "
         "3 letters per second (3 LPS).\r\n\r\n"
     );
     //\r — Carriage Return (move cursor to beginning of line).

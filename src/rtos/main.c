@@ -322,6 +322,7 @@ void rtos_monkeytype(void *arg)
                         USART1_SendString_RTOS(" accuracy: ",pdMS_TO_TICKS(10));
                         int_to_string(wpm_score.accuracy, temp_acc);
                         USART1_SendString_RTOS(temp_acc,pdMS_TO_TICKS(10));
+                        USART1_SendString_RTOS("% ",pdMS_TO_TICKS(10));
                         USART1_SendString_RTOS("\r\n",pdMS_TO_TICKS(10));
                         uart_buf_locked = 0;
                         memset(temp, 0, sizeof(temp));

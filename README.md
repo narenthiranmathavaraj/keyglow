@@ -4,10 +4,24 @@ Two embedded projects in one repo. Both run on a simulated STM32F100 (Cortex-M3)
 
 1. **baremetal**: UART echo using interrupts and SysTick. No RTOS, no HAL.
 2. **rtos**: Speed typing test and motivation chatbot on FreeRTOS.
+<table border="1" cellpadding="10">
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/gifs/bare_metal.gif" alt="Slow Typer demo" width="100%"><br>
+      <b>Slow Typer (bare metal)</b><br>
+      Type fast. Characters are echoed back at 3 letters per second.
+    </td>
+    <td width="50%" align="center">
+      <img src="docs/gifs/rtos.gif" alt="Monkey Typer demo" width="100%"><br>
+      <b>Monkey Typer (FreeRTOS)</b><br>
+      Typing test shows WPM and accuracy. The chatbot prints a quote.
+    </td>
+  </tr>
+</table>
 
 ## Try it in the browser (GitHub Codespaces)
 
-1. Click the badge and create codespace and wait for the container to build.
+1. Click the badge and create codespace and wait for the container to build **"Please Wait atleast until README.md is loaded inside the codespace"**.
 
    [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/narenthiranmathavaraj/tiny_chip_two_brains)
 
