@@ -1,5 +1,5 @@
 {
-  "name": "KeyGlow firmware (STM32F100 on QEMU)",
+  "name": "Tiny Chip, Two Brains: Bare Metal and RTOS firmware (STM32F100 on QEMU)",
   "build": {
     "dockerfile": "Dockerfile"
   },

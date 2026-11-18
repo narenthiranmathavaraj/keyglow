@@ -7,9 +7,9 @@ Two embedded projects in one repo. Both run on a simulated STM32F100 (Cortex-M3)
 
 ## Try it in the browser (GitHub Codespaces)
 
-1. Click the badge and wait for the container to build.
+1. Click the badge and create codespace and wait for the container to build.
 
-   [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/narenthiranmathavaraj/tiny_chip_two_brains)
+   [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/narenthiranmathavaraj/tiny_chip_two_brains)
 
 2. Open a terminal in the Codespace: **Terminal > New Terminal** (or Ctrl+`).
 

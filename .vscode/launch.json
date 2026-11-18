@@ -2,10 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug KeyGlow (attach to QEMU on :1234)",
+            "name": "Debug tiny_chip_two_brains (attach to QEMU on :1234)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/keyglow.elf",
+            "program": "${workspaceFolder}/build/tiny_chip_two_brains.elf",
             "cwd": "${workspaceFolder}",
             "MIMode": "gdb",
             "miDebuggerPath": "/usr/bin/gdb-multiarch",

@@ -1,7 +1,7 @@
 
 # make -s <cmd> s->suppress make -s build_rtos
 
-# KeyGlow: firmware for a simulated STM32F100 (Cortex-M3) on QEMU
+# Tiny Chip, Two Brains: Bare Metal and RTOS firmware for a simulated STM32F100 (Cortex-M3) on QEMU
 CPU     ?= cortex-m3
 BOARD   ?= stm32vldiscovery
 PROJECT_BAREMETAL ?= src/baremetal/startup
