@@ -3,10 +3,10 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "postCreateCommand": "./scripts/bootstrap.sh && make doctor",
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
+  "postCreateCommand": "git submodule update --init --recursive && make doctor; pip3 install pygments --break-system-packages; wget -qO ~/.gdbinit https://git.io/.gdbinit || true",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -14,7 +14,6 @@
         "ms-python.python",
         "ms-vscode.makefile-tools",
         "ZixuanWang.linkerscript",
-        "ms-vscode.cpptools",
         "davidbwaters.macos-modern-theme",
         "maziac.hex-hover-converter",
         "ms-vscode.hexeditor",
@@ -36,15 +35,11 @@
         "terminal.integrated.cursorBlinking": true,
         "terminal.integrated.cursorStyle": "line",
         "debug.console.fontSize": 16,
-        "editor.rulers": [
-          120
-        ],
+        "editor.rulers": [120],
         "terminal.integrated.sendKeybindingsToShell": true,
         "extensions.ignoreRecommendations": true,
         "remote.autoForwardPorts": false
       }
     }
-  },
-  "postCreateCommand": "pip3 install pygments --break-system-packages && wget -P ~ https://git.io/.gdbinit"
-
+  }
 }
