@@ -8,12 +8,12 @@ Two embedded projects in one repo. Both run on a simulated STM32F100 (Cortex-M3)
   <tr>
     <td width="50%" align="center">
       <img src="docs/gifs/bare_metal.gif" alt="Slow Typer demo" width="100%"><br>
-      <b>Slow Typer (bare metal)</b><br>
+      <b>Drip Typer (bare metal)</b><br>
       Type fast. Characters are echoed back at 3 letters per second.
     </td>
     <td width="50%" align="center">
       <img src="docs/gifs/rtos.gif" alt="Monkey Typer demo" width="100%"><br>
-      <b>Monkey Typer (FreeRTOS)</b><br>
+      <b>Monkey Type (FreeRTOS)</b><br>
       Typing test shows WPM and accuracy. The chatbot prints a quote.
     </td>
   </tr>
